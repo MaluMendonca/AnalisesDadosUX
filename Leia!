@@ -1,0 +1,116 @@
+Eu usei o código no colab! ⋆
+Recomendo que voce separe conforme os comentários em cada celula (para evitar de, por exemplo, 
+importar as bibliotecas de novo). ⋆𐙚₊˚⊹♡
+Segue a explicação detalhada sobre o código para tentar sanar possíveis dúvidas:
+
+🛠️ O que este projeto faz?
+Este projeto explora a interseção entre análise de dados e UX Design, 
+utilizando dados de feedback de usuários (fictícios nesse exemplo) para identificar oportunidades de melhoria em um aplicativo móvel. 
+O objetivo é demonstrar como insights derivados de dados podem informar e aprimorar decisões de design.
+
+📝 Passo a passo do projeto:
+Criação/Obtenção de Dados de Feedback (Fictícios):
+
+  Criamos um conjunto de dados simulado, representando feedback de usuários coletado de diversas fontes (loja de aplicativos, formulários no app, etc.).
+  Os dados incluem informações como data, plataforma, avaliação (em estrelas) e comentários textuais.
+
+  Este passo demonstra como dados de feedback, mesmo em pequena escala, podem ser estruturados para análise.
+
+feedback_data = [
+    {'Data': '2025-05-10', 'Plataforma': 'Android', 'Avaliação': 3, 'Comentário': 'A navegação poderia ser mais intuitiva.'},
+    {'Data': '2025-05-11', 'Plataforma': 'iOS', 'Avaliação': 5, 'Comentário': 'Adoro o design, muito fácil de usar!'},
+    {'Data': '2025-05-11', 'Plataforma': 'Android', 'Avaliação': 2, 'Comentário': 'O aplicativo trava muito.'},
+    {'Data': '2025-05-12', 'Plataforma': 'iOS', 'Avaliação': 4, 'Comentário': 'Gostaria que tivesse mais opções de filtro.'},
+    {'Data': '2025-05-13', 'Plataforma': 'Android', 'Avaliação': 1, 'Comentário': 'Não consigo nem fazer login!'},
+    {'Data': '2025-05-13', 'Plataforma': 'iOS', 'Avaliação': 5, 'Comentário': 'Excelente aplicativo, funciona perfeitamente.'},
+    {'Data': '2025-05-14', 'Plataforma': 'Android', 'Avaliação': 3, 'Comentário': 'Achei confuso como algumas informações estão organizadas.'},
+    {'Data': '2025-05-14', 'Plataforma': 'iOS', 'Avaliação': 4, 'Comentário': 'Seria ótimo ter um modo noturno.'},
+    {'Data': '2025-05-14', 'Plataforma': 'Android', 'Avaliação': 2, 'Comentário': 'Bateria descarrega muito rápido com este app.'}
+]
+
+1- Carregamento e Exploração Inicial dos Dados:
+
+  Utilizamos a biblioteca pandas para criar um DataFrame a partir dos dados de feedback.
+  Funções como head(), info() e describe() são usadas para obter uma visão geral da estrutura e das estatísticas dos dados.
+
+
+import pandas as pd
+
+df = pd.DataFrame(feedback_data)
+
+print("Primeiras linhas do DataFrame:")
+print(df.head())
+
+print("\nInformações sobre o DataFrame:")
+print(df.info())
+
+print("\nEstatísticas descritivas:")
+print(df.describe())
+
+
+2- Análise:
+
+  1-Realizamos uma análise exploratória focada em insights relevantes para UX.
+  2-Distribuição das Avaliações: Visualizamos a frequência de cada avaliação para entender a satisfação geral dos usuários.
+  3-Análise de Texto dos Comentários: Analisamos os comentários textuais para identificar temas recorrentes, problemas e sugestões.
+
+  Nuvem de Palavras: Geramos uma nuvem de palavras para destacar os termos mais frequentes nos comentários, 
+facilitando a identificação rápida dos principais tópicos de feedback.
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud, STOPWORDS
+
+# Distribuição das avaliações
+plt.figure(figsize=(8, 6))
+sns.countplot(data=df, x='Avaliação')
+plt.title('Distribuição das Avaliações dos Usuários')
+plt.xlabel('Avaliação')
+plt.ylabel('Número de Usuários')
+plt.show()
+
+if 'Plataforma' in df.columns:
+    plt.figure(figsize=(10, 6))
+    sns.countplot(data=df, x='Avaliação', hue='Plataforma')
+    plt.title('Distribuição das Avaliações por Plataforma')
+    plt.xlabel('Avaliação')
+    plt.ylabel('Número de Usuários')
+    plt.legend(title='Plataforma')
+    plt.show()
+
+# Nuvem de Palavras
+all_comments = ' '.join(df['Comentário'].astype(str))
+stopwords = set(STOPWORDS)
+stopwords.update(["o", "a", "os", "as", "um", "uma", "uns", "umas", "de", "do", "da", "dos", "das", "em", "para", "com", "ao", "aos", "pelo", "pela", "pelos", "pelas", "no", "na", "nos", "nas", "ser", "estar", "ter", "ir", "vir", "muito", "mais", "bem", "bom", "melhor", "pior", "achei", "gostaria", "poderia", "seria"])
+wordcloud = WordCloud(width=800, height=400,
+                      background_color='white',
+                      stopwords=stopwords,
+                      min_font_size=10).generate(all_comments)
+plt.figure(figsize=(12, 8), facecolor=None)
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.tight_layout(pad=0)
+plt.show()
+
+print("\nAnálise qualitativa dos comentários:")
+for index, row in df.iterrows():
+    print(f"Avaliação: {row['Avaliação']}, Comentário: {row['Comentário']}")
+
+
+
+3- Identificação de Insights de UX:
+
+  1-Com base na análise dos dados, identificamos os principais problemas e pontos positivos mencionados pelos usuários.
+  2-Os problemas são agrupados por tema (navegação, desempenho, funcionalidades...).
+  3-A priorização dos problemas é feita considerando a frequência e o impacto na experiência do usuário.
+
+
+Espero ter sido útil! 
+Obrigada pela atenção ♡‧₊˚
+
+♡ ∩_∩ 
+(„• ֊ •„)♡
+|￣U U￣￣￣￣￣￣￣￣￣|
+|  Malu               |   
+ ￣￣￣￣￣￣￣￣￣￣￣￣
