@@ -1,0 +1,82 @@
+#criar o dataframe ficticio
+feedback_data = [
+    {'Data': '2025-05-10', 'Plataforma': 'Android', 'Avaliação': 3, 'Comentário': 'A navegação poderia ser mais intuitiva.'},
+    {'Data': '2025-05-11', 'Plataforma': 'iOS', 'Avaliação': 5, 'Comentário': 'Adoro o design, muito fácil de usar!'},
+    {'Data': '2025-05-11', 'Plataforma': 'Android', 'Avaliação': 2, 'Comentário': 'O aplicativo trava muito.'},
+    {'Data': '2025-05-12', 'Plataforma': 'iOS', 'Avaliação': 4, 'Comentário': 'Gostaria que tivesse mais opções de filtro.'},
+    {'Data': '2025-05-13', 'Plataforma': 'Android', 'Avaliação': 1, 'Comentário': 'Não consigo nem fazer login!'},
+    {'Data': '2025-05-13', 'Plataforma': 'iOS', 'Avaliação': 5, 'Comentário': 'Excelente aplicativo, funciona perfeitamente.'},
+    {'Data': '2025-05-14', 'Plataforma': 'Android', 'Avaliação': 3, 'Comentário': 'Achei confuso como algumas informações estão organizadas.'},
+    {'Data': '2025-05-14', 'Plataforma': 'iOS', 'Avaliação': 4, 'Comentário': 'Seria ótimo ter um modo noturno.'},
+    {'Data': '2025-05-14', 'Plataforma': 'Android', 'Avaliação': 2, 'Comentário': 'Bateria descarrega muito rápido com este app.'}
+]
+
+#instalar a bilbioteca para a nuvem de palavras (wordcloud)
+!pip install wordcloud
+
+#importar biblioteca e visualização do dataframe
+import pandas as pd
+
+df = pd.DataFrame(feedback_data)
+
+print("Primeiras linhas do DataFrame:")
+print(df.head())
+
+print("\nInformações sobre o DataFrame:")
+print(df.info())
+
+print("\nEstatísticas descritivas:")
+print(df.describe())
+
+
+#
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Distribuição das avaliações
+plt.figure(figsize=(8, 6))
+sns.countplot(data=df, x='Avaliação')
+plt.title('Distribuição das Avaliações dos Usuários')
+plt.xlabel('Avaliação')
+plt.ylabel('Número de Usuários')
+plt.show()
+
+if 'Plataforma' in df.columns:
+    plt.figure(figsize=(10, 6))
+    sns.countplot(data=df, x='Avaliação', hue='Plataforma')
+    plt.title('Distribuição das Avaliações por Plataforma')
+    plt.xlabel('Avaliação')
+    plt.ylabel('Número de Usuários')
+    plt.legend(title='Plataforma')
+    plt.show()
+
+print("\nAnálise qualitativa dos comentários:")
+for index, row in df.iterrows():
+    print(f"Avaliação: {row['Avaliação']}, Comentário: {row['Comentário']}")
+
+
+#
+
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+
+# Combine todos os comentários em um unico texto
+all_comments = ' '.join(df['Comentário'].astype(str))
+
+# Remover palavras que nao precisamos 
+stopwords = set(STOPWORDS)
+stopwords.update(["o", "a", "os", "as", "um", "uma", "uns", "umas", "de", "do", "da", "dos", "das", "em", "para", "com", "ao", "aos", "pelo", "pela", "pelos", "pelas", "no", "na", "nos", "nas", "ser", "estar", "ter", "ir", "vir", "muito", "mais", "bem", "bom", "melhor", "pior", "achei", "gostaria", "poderia", "seria"]) # Adicione mais stopwords se necessário
+
+# Crie o objeto WordCloud
+wordcloud = WordCloud(width=800, height=400,
+                      background_color='white',
+                      stopwords=stopwords,
+                      min_font_size=10).generate(all_comments)
+
+# Plote a nuvem de palavras
+plt.figure(figsize=(12, 8), facecolor=None)
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.tight_layout(pad=0)
+plt.show()
